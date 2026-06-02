@@ -1,0 +1,997 @@
+{
+  "name": "Video Automation (images only)",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "=define",
+        "text": "=You are a master at creating short-form viral videos. I want your help in generating historical POV videos, in which the user sees POV-style images of an individual throughout a major breakthrough in science in technology. The channel's name is \"Before it Changed Everything.\"\n\nEach video is 25 seconds long, and contains 5 scenes, 5 seconds each.\n\nEach scene requires one image and one audio voiceover, so the whole story will consist of 5 images and 5 audios. !important\n\nThe entire 25 second video would narrate a short story from that historical era.\n\nThe image prompts have to be such that they help the AI model maintain as much consistency from one image to the next. Since it's a POV video, there are very few details of the person itself that must be maintained aside from arms and feet, and torso and legs if visible.\n\nevery scene should have the POV individual interacting with a new character or setting, so this would also reduce the need for consistency aside from the same historical time period. However, remember to describe each scene with enough references so that each prompt can work individually.\n\nAny visible details of the character (hands feet accessories) must also be referenced in each prompt and described in way that maintains consistency.\n\nFor example, if you're describing the battle of Marathon and your first prompt is about an athenian hoplite surrounded by soldiers\n\nthe next image prompt must also specify that the soldiers are athenian from the battle of marathon\n\nFinally, the script should be such as to give enough details about the event, but not give the actual topic away. The script should always end as - can you guess the discovery - this would be part of the 5th segment, not an addional one\n\nHere are three ideal outputs\n\nScene 1 – Setting the Type\n\nPOV of a young male apprentice working in Johannes Gutenberg’s printing workshop during the creation of the Gutenberg Bible (circa 1454).\nLocation: Mainz, Germany. Time Period: Mid-15th century. Setting: A medieval print shop at dawn, with timber beams, stone walls, and floors stained with ink. The space is lit dimly by hanging tallow candles and an early morning glow through a small window.\nVisible Body Parts: Your light-skinned hands are ink-stained and youthful, gripping a wooden composing stick filled with reversed cast-metal movable type. You’re wearing a cream-colored linen shirt with the sleeves rolled to the elbow and a leather apron over the front. Black ink is smudged along your knuckles and fingers.\nObjects in Scene: Brass typesetting tools, loose metal letter blocks, parchment scraps, candle stubs, wooden tables and shelving lined with ink pots, scrolls, and stacked paper.\nPeople in Scene: Johannes Gutenberg, a bearded middle-aged man in a dark wool robe, stands beside two young apprentices in plain tunics, one with a leather cap. They are discussing a typeset frame.\nAtmosphere: The air smells of wax, metal, and damp parchment. The environment is quiet but intense — the only sounds are soft footsteps, the creak of wood, and the delicate click of metal type.\n\n🎙️ “Master Gutenberg said today would change the world. I still don’t know how, but I believe him.”\n\n⸻\n\nScene 2 – Assembling the Page\n\nPOV of a young male apprentice working in Johannes Gutenberg’s printing workshop during the creation of the Gutenberg Bible (circa 1454).\nLocation: Mainz, Germany. Time Period: Mid-15th century. Setting: The composing room of a medieval print shop during mid-morning. Wooden beams stretch across the ceiling. Light streams in from a narrow window, illuminating workbenches and shelves filled with parchment and metal type.\nVisible Body Parts: Your fair-skinned fingers, stained with black ink and gray lead dust, are delicately arranging tiny reversed metal letters into a composing tray. You wear a loose-fitting white linen shirt with the sleeves pushed up to the elbows. A brown leather apron is partially visible.\nObjects in Scene: A composing stick and tray, several piles of lead type, an open parchment sample of Latin text, ink cloth, wooden drawers filled with type blocks, and brass tweezers.\nPeople in Scene: A young boy in a brown woolen cap leans nearby, watching your work. Another apprentice with curly hair sorts letters into compartments in the background.\nAtmosphere: The room is quiet and focused. Dust floats in the sunlight. The air smells of wax, metal, and ink.\nImage to video: your hands are gently moving across the composing tray\n\n🎙️ “Each letter must be perfect. Backwards, precise, eternal. One mistake, and the whole page is flawed.”\n\n⸻\n\nScene 3 – Engaging the Press\n\nPOV of a young male apprentice operating a wooden printing press in Johannes Gutenberg’s workshop during the creation of the Gutenberg Bible (circa 1454).\nLocation: Mainz, Germany. Time Period: Mid-15th century. Setting: A candlelit central chamber within a medieval print shop, dominated by a large oak screw press. Afternoon light spills through a small window, mixing with flickering candlelight.\nVisible Body Parts: Your hands grip a large wooden press lever, forearms straining under effort. Your rolled-up linen sleeves reveal ink-smudged skin. The tops of your worn leather shoes are barely visible below.\nObjects in Scene: A heavy wooden screw press, a parchment page secured under the press plate, a nearby ink roller covered in thick black ink, rags for cleaning, an oil pot, and drying parchment stacked neatly nearby.\nPeople in Scene: Johannes Gutenberg stands behind the press with folded arms, observing closely. Another apprentice loads a new forme with type in the background.\nAtmosphere: The press groans under pressure. The room smells of ink, oil, and scorched parchment. The moment is tense, mechanical, and filled with focus.\nimage to video: you pull down on the lever\n\n🎙️ “We press it down — firm, not forceful. It creaks like an old tree”\n\n!Important: make sure every script segment is a little shy of 4 seconds, otherwise the video will become black for that much time.\n\nThe theme of this video is {{ $('Google Sheets').item.json.Theme }} and the event I want you to generate a video for is the {{ $('Google Sheets').item.json.Topic }}",
+        "hasOutputParser": true
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.5,
+      "position": [
+        -496,
+        304
+      ],
+      "id": "a883fd22-0c74-436a-8b3d-c0429b69aa70",
+      "name": "Basic LLM Chain"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -576,
+        464
+      ],
+      "id": "c8e01b3a-a0af-4bf9-97b7-dceceb4b8020",
+      "name": "OpenAI Chat Model"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "[\n  {\n    \"scene\": {\n      \"image-prompt\": \"X\",\n      \"image-to-video-prompt\": \"X\",\n      \"voiceover-script\": \"The Master says brush before blade. Every stroke must honor the classics. So I copy each character with care.\"\n    }\n  },\n  {\n    \"scene\": {\n      \"image-prompt\": \"POV of a young male apprentice carving Chinese characters into a wooden block in a Song Dynasty woodblock printing workshop (circa 11th century). Location: Kaifeng, China. Time Period: Northern Song Dynasty. Setting: Mid-morning in a sunlit workshop filled with the scent of sandalwood and ink. Visible Body Parts: Your hands hold a small carving knife, steadying the woodblock with your left hand. Fingernails are stained with ink and sawdust. You're wearing the same indigo scholar robe with a tan hemp sash. Objects in Scene: A rectangular block of pearwood, carving knife set, character sketch, wood shavings, and discarded test blocks. People in Scene: A senior carver leans in, adjusting your grip. Another apprentice carefully sharpens tools beside a table. Atmosphere: Quiet but concentrated, with the soft scraping of blades on wood.\",\n      \"image-to-video-prompt\": \"POV carving reversed Chinese characters into a woodblock using a fine knife. Your ink-stained hands hold the blade with precision. You're wearing wide blue robes and a hemp sash. A master carver leans in to assist. Around you are test blocks, carving tools, and wood shavings. Light streams through a window. The setting is peaceful and disciplined.\",\n      \"voiceover-script\": \"Each cut must be clean. One slip, and the whole block is ruined. My hands shake, but the blade must not.\"\n    }\n  },\n  {\n    \"scene\": {\n      \"image-prompt\": \"POV of a young male apprentice inking a carved woodblock in a Song Dynasty printing workshop preparing to print a Confucian text (circa 11th century). Location: Kaifeng, China. Time Period: Northern Song Dynasty. Setting: A low wooden table set beside an open window with bamboo blinds. Visible Body Parts: Your hands, darkened slightly with dried ink, gently roll a thin cloth pad across the carved woodblock. Sleeves of your wide indigo robe are tied back with a cord to avoid contact. Objects in Scene: Carved woodblock, ink pad, ceramic ink dish, sheets of xuan paper stacked neatly. People in Scene: An assistant waits nearby, holding parchment. The calligrapher watches silently from across the room. Atmosphere: Meditative and rhythmic, with the scent of ink and aged wood.\",\n      \"image-to-video-prompt\": \"POV inking a carved woodblock using a cloth pad. Your hands apply ink in smooth strokes. Sleeves are tied back with a cord. Sunlight glows through bamboo blinds. An assistant stands ready with paper. The carved Chinese characters are clearly visible. Traditional setting, calm mood.\",\n      \"voiceover-script\": \"The ink must reach every groove, but never flood the wood. I press gently, as I was taught.\"\n    }\n  },\n  {\n    \"scene\": {\n      \"image-prompt\": \"POV of a young male apprentice printing a Confucian text by pressing paper onto an inked woodblock in a Song Dynasty workshop (circa 11th century). Location: Kaifeng, China. Time Period: Northern Song Dynasty. Setting: A spacious studio with scrolls drying on racks and large tables covered in paper. Visible Body Parts: Your hands smooth a sheet of xuan paper over the inked woodblock, using a bamboo rubbing tool. The same indigo robe and hemp sash are visible as you lean forward. Objects in Scene: The carved woodblock, fresh paper, bamboo baren (rubbing pad), and drying scrolls clipped above. People in Scene: A younger student observes curiously. A supervisor quietly inspects finished prints behind you. Atmosphere: Serious, focused, with the sound of rubbing and distant birdsong through the open shutters.\",\n      \"image-to-video-prompt\": \"POV printing by pressing paper onto an inked woodblock with a bamboo rubbing pad. Your hands move in circular motions. Robes shift slightly as you lean in. Around you are scroll racks, carved blocks, and parchment. Another student watches your technique. Warm, quiet atmosphere.\",\n      \"voiceover-script\": \"My heart races with each rub. When I lift the paper, it will show if I am worthy of the Master’s trust.\"\n    }\n  },\n  {\n    \"scene\": {\n      \"image-prompt\": \"POV of a young male apprentice hanging a freshly printed Confucian scroll to dry in a Song Dynasty workshop (circa 11th century). Location: Kaifeng, China. Time Period: Northern Song Dynasty. Setting: The drying room of a print shop, with bamboo rods suspended from the ceiling, scrolls clipped neatly in rows. Visible Body Parts: Your hands hold the top of a damp scroll, aligning it with a bamboo line. Fingertips slightly stained. A glimpse of your indigo sleeve and tan sash appear at the edge of the frame. Objects in Scene: Scrolls with bold black characters, wooden pegs, thin cords, incense burner. People in Scene: An elderly scholar passes through behind you, examining the finished work with folded hands. Atmosphere: The room is airy, quiet, and smells of ink, wood, and incense.\",\n      \"image-to-video-prompt\": \"POV hanging a wet printed scroll onto a drying rack made of bamboo. Your hands gently clip the scroll in place. Ink glistens faintly on the parchment. Scholar robes and sash visible at edge of frame. Elder scholar walks past behind you. Warm, ceremonial feeling.\",\n      \"voiceover-script\": \"The ink is still fresh. The words still wet. But soon, this scroll will speak to minds I’ll never meet.\"\n    }\n  },\n  {\n    \"scene\": {\n      \"image-prompt\": \"POV of a young male apprentice presenting the completed printed scroll to a noble scholar in a Song Dynasty library (circa 11th century). Location: Kaifeng, China. Time Period: Northern Song Dynasty. Setting: A private study with polished wooden floors, lattice windows, shelves of bamboo-bound books, and bronze incense holders. Visible Body Parts: Your hands hold the scroll wrapped in silk, extended forward in offering. The blue sleeves of your scholar’s robe drape down, your feet barely visible on a woven mat. Objects in Scene: A lacquered writing table, a brush holder, open scrolls, jade paperweights. People in Scene: An elderly Confucian scholar in dark green robes receives the scroll with a gentle bow. A servant pours tea in the background. Atmosphere: Silent reverence, with the soft aroma of tea and cedar.\",\n      \"image-to-video-prompt\": \"POV offering a silk-wrapped printed scroll to a seated scholar in a Song Dynasty study. Your hands extend the scroll respectfully. Robes and mat beneath you visible. The scholar bows slightly. Teacups, incense, and bamboo books line the room. Serene, scholarly tone.\",\n      \"voiceover-script\": \"He bows to receive it, but I bow deeper. This scroll carries more than ink — it carries my beginning.\"\n    }\n  }\n]"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        464
+      ],
+      "id": "4fe9face-f441-4b21-b7fe-c0573267055e",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "output",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        -96,
+        304
+      ],
+      "id": "19fa8ce8-d606-4776-8df3-d2ed3125ec57",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.replicate.com/v1/models/black-forest-labs/flux-schnell/predictions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n    \"input\": {\n      \"prompt\": \"{{ $json.scene['image-prompt'] }}\",\n      \"go_fast\": true,\n      \"megapixels\": \"1\",\n      \"num_outputs\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"output_format\": \"jpg\",\n      \"output_quality\": 80,\n      \"num_inference_steps\": 4\n    }\n  } ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        224,
+        352
+      ],
+      "id": "6d169fad-95a9-4c09-a874-32ae82c87fff",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "content": "## Generate Images",
+        "height": 320,
+        "width": 1260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        224
+      ],
+      "typeVersion": 1,
+      "id": "79e768d1-d376-4e21-aa0d-32c047175fae",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "amount": 7
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        592,
+        352
+      ],
+      "id": "3f2aa1a2-b4ff-48ce-b737-c55b610cc42c",
+      "name": "Wait",
+      "webhookId": "39ba6c0a-5107-44ad-b812-1616712b4a5b"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        928,
+        352
+      ],
+      "id": "bfeac8c9-9c45-4d9d-8a10-e50b2b1c943b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.elevenlabs.io/v1/text-to-speech/CwhRBWXzGAHq8TQ4Fs17",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "xi-api-key"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"text\": \"{{ $('Split Out').item.json.scene['voiceover-script'] }}\",\n  \"model_id\": \"eleven_multilingual_v2\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        624,
+        784
+      ],
+      "id": "1643a83d-6d3b-4470-bac4-a0f9834d4b0f",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        320,
+        720
+      ],
+      "id": "3710a938-b355-4c34-9d8e-f05c54fbb45f",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "content": "## Generate Audio",
+        "height": 340,
+        "width": 1260
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        64,
+        624
+      ],
+      "typeVersion": 1,
+      "id": "1207c260-f8f2-4306-9fc7-8fb709594ece",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "POV Videos Audio",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        560,
+        0
+      ],
+      "id": "d58579f6-43a2-4e64-a35d-f17f8a4434eb",
+      "name": "Google Drive"
+    },
+    {
+      "parameters": {
+        "name": "=audio-{{ $runIndex }}.mp3",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $('Google Drive').item.json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        960,
+        768
+      ],
+      "id": "39494424-aba8-41fe-804f-4e73f82939f3",
+      "name": "Google Drive1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.creatomate.com/v1/renders",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"template_id\": \"2dffc678-70b0-47fb-9449-24d7e0cfd625\",\n  \"modifications\": {\n    \"Image-1.source\": \"{{ $json.output[0][0] }}\",\n    \"Voiceover-1.source\": \"{{ $json.webContentLink[0] }}\",\n    \"Image-2.source\": \"{{ $json.output[0][1] }}\",\n    \"Voiceover-2.source\": \"{{ $json.webContentLink[1] }}\",\n    \"Image-3.source\": \"{{ $json.output[0][2] }}\",\n    \"Voiceover-3.source\": \"{{ $json.webContentLink[2] }}\",\n    \"Image-4.source\": \"{{ $json.output[0][3] }}\",\n    \"Voiceover-4.source\": \"{{ $json.webContentLink[3] }}\",\n    \"Image-5.source\": \"{{ $json.output[0][4] }}\",\n    \"Voiceover-5.source\": \"{{ $json.webContentLink[4] }}\"\n  }\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1424,
+        1024
+      ],
+      "id": "7205af57-488f-4088-8115-62c86574c18e",
+      "name": "Generate Videos"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1424,
+        480
+      ],
+      "id": "34531ec6-b988-48b3-9f6e-1f8dbff2542f",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "fieldsToAggregate": {
+          "fieldToAggregate": [
+            {
+              "fieldToAggregate": "output[0]"
+            },
+            {
+              "fieldToAggregate": "webContentLink"
+            },
+            {
+              "fieldToAggregate": "Topic"
+            },
+            {
+              "fieldToAggregate": "output[4].title"
+            },
+            {
+              "fieldToAggregate": "output[4].description"
+            },
+            {
+              "fieldToAggregate": "=drive_folder_id"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.aggregate",
+      "typeVersion": 1,
+      "position": [
+        1408,
+        768
+      ],
+      "id": "a76f1a1a-5e66-4836-94f3-5317cc214f84",
+      "name": "Aggregate"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "share",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.drive_folder_id }}",
+          "mode": "id"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "writer",
+            "type": "anyone"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        0
+      ],
+      "id": "7e6c5891-cd7f-4630-8416-caede694c241",
+      "name": "Google Drive2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 12
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "0eb2ad65-8d32-4a28-b2ff-98ec9f0e56dc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY",
+          "mode": "list",
+          "cachedResultName": "Before it changed everything tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Pending"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        272,
+        0
+      ],
+      "id": "091b5d44-aa68-4834-bd40-b4de06b2d000",
+      "name": "Google Sheets"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY",
+          "mode": "list",
+          "cachedResultName": "Before it changed everything tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Pending"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        160,
+        992
+      ],
+      "id": "1787f626-9d32-4f07-8100-91d34b26b438",
+      "name": "Google Sheets1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Generate Videos').item.json.url }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1104,
+        992
+      ],
+      "id": "78a0ca91-4e6f-46df-b928-412800d0cbce",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "name": "={{ $('Google Sheets1').item.json.Topic }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "1Cay44vDNFZ_zELmV9RsdHTv6UFTAszMc",
+          "mode": "list",
+          "cachedResultName": "Before It Changed Everything Videos",
+          "cachedResultUrl": "https://drive.google.com/drive/folders/1Cay44vDNFZ_zELmV9RsdHTv6UFTAszMc"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        192,
+        1280
+      ],
+      "id": "e6d1f097-c465-48bf-b0f0-eb70de48251f",
+      "name": "Google Drive3"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1728,
+        1024
+      ],
+      "id": "e559267c-7046-4efa-9973-5022f3b1c3fd",
+      "name": "Wait1",
+      "webhookId": "576048df-e86b-4196-a1c2-54e5775e24d3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f151b3ff-0fa1-406a-974d-8c27fbca1a54",
+              "name": "drive_folder_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        848,
+        0
+      ],
+      "id": "8b70306f-fd2b-45a0-9c00-ef393ed83745",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "resource": "fileFolder",
+        "queryString": "POV Videos Audio",
+        "limit": 1,
+        "filter": {
+          "whatToSearch": "folders"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        464,
+        1280
+      ],
+      "id": "767246f2-55d9-47a4-85d1-99554a569b0e",
+      "name": "Google Drive4"
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "operation": "deleteFolder",
+        "folderNoRootId": {
+          "__rl": true,
+          "value": "={{ $json.id }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        704,
+        1280
+      ],
+      "id": "628b4630-3618-47f0-bd95-7d4434919886",
+      "name": "Google Drive5"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an expert at creating viral YouTube shorts. I am creating a science video series about  {{ $json.Theme }}, and the topic of this video is {{ $json.Topic }}. Please generate a viral title and description for this video. Add the hashtag #shorts at the end of the title, and output as JSON in the following format:\n\ntitle:\ndescription:\n\nThe title and description should not give the topic away, because the purpose of the video is to provide clues and context around the topic and encourage people to take a guess as to what it is."
+            }
+          ]
+        },
+        "jsonOutput": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        512,
+        992
+      ],
+      "id": "60e0b370-dba6-4324-9bb8-2a81c29752f7",
+      "name": "OpenAI"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY",
+          "mode": "list",
+          "cachedResultName": "Before it changed everything tracker",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Master",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/19Ctw6aVclYotXYMhHJzZifn5q28-MZSNvLk2zoECrEY/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Topic": "={{ $('Google Sheets1').item.json.Topic }}",
+            "Title": "={{ $json.message.content.title }}",
+            "Description": "={{ $json.message.content.description }}",
+            "Status": "Generated"
+          },
+          "matchingColumns": [
+            "Topic"
+          ],
+          "schema": [
+            {
+              "id": "Topic",
+              "displayName": "Topic",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Theme",
+              "displayName": "Theme",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date Posted",
+              "displayName": "Date Posted",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        864,
+        992
+      ],
+      "id": "492ce688-87d1-4659-9320-728b606e3b58",
+      "name": "Google Sheets2"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Basic LLM Chain": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Google Drive1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Aggregate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate": {
+      "main": [
+        [
+          {
+            "node": "Generate Videos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Videos": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive2": {
+      "main": [
+        [
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Google Drive3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive3": {
+      "main": [
+        [
+          {
+            "node": "Google Drive4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Google Drive2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive4": {
+      "main": [
+        [
+          {
+            "node": "Google Drive5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets2": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c294cae7-d7df-4b8b-b6d6-36a9c1233507",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "1abdde090353a08a239f64bda7c91abda3ecc18ec7c8fecb06374fad596fa038"
+  },
+  "id": "xYxspdO8nXngkNxB",
+  "tags": []
+}
